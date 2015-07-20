@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<guessablesCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  	<ordered>false</ordered>
+	<guessables>
+		<guessable>
+      		<result>Freitag</result>
+      		<order>10</order>
+		</guessable>
+    	<guessable>
+      		<result>Advent</result>
+      		<order>7</order>
+		</guessable>
+		<guessable>
+      		<result>Testwort</result>
+      		<order>2</order>
+		</guessable>
+		<guessable>
+      		<result>Geburt</result>
+      		<order>1</order>
+		</guessable>
+		<guessable>
+      		<result>Frage</result>
+      		<order>6</order>
+		</guessable>
+		<guessable>
+      		<result>Ergebnis</result>
+      		<order>4</order>
+		</guessable>
+		<guessable>
+      		<result>Regie</result>
+      		<order>5</order>
+		</guessable>
+		<guessable>
+      		<result>Weissbier</result>
+      		<order>5</order>
+		</guessable>
+		<guessable>
+      		<result>Geburtstag</result>
+      		<order>1</order>
+		</guessable>
+	</guessables>
+</guessablesCollection>
