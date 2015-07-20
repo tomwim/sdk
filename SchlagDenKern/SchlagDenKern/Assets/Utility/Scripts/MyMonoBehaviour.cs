@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MyMonoBehaviour : MonoBehaviour {
+public class MyMonoBehaviour : MonoBehaviour 
+{
 	
 	// Use this for initialization
 	public virtual void StartMe () 
