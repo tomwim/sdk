@@ -19,7 +19,8 @@ public class Guessables<T> {
 	[XmlElement("ordered")]
 	public bool ordered;
 
-	public Guessables() {
+	public Guessables() 
+	{
 		guessablesList = new List<T>();
 	}
 }

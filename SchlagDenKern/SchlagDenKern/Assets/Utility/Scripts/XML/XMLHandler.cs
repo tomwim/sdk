@@ -20,6 +20,9 @@ public class XMLHandler
 		case GameLoadingController.Game.NUMBERWORDS:
 			filePath += "Resources/Games/NumberWords/numberWords.xml";
 			break;
+		case GameLoadingController.Game.SORT:
+			filePath += "Resources/Games/Sort/sort.xml";
+			break;
 		default:
 			filePath += "";
 			break;
