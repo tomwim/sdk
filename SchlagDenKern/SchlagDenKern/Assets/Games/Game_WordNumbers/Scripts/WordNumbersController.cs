@@ -2,10 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class WordNumbersController : GameController {
+public class WordNumbersController : GameController 
+{
 
 	public Word wordPrefab;
-	public GameObject gameCanvas;
 	public float switchDuration;
 
 	private List<Word> words;
@@ -26,20 +26,30 @@ public class WordNumbersController : GameController {
 	public override void Next ()
 	{
 		currentWordIndex++;
-		MoveWordsUp ();
+		MoveWords ();
 	}
 
-	private void MoveWordsUp ()
+	public override void Previous ()
+	{
+		if (currentWordIndex > 0)
+		{
+			currentWordIndex--;
+			MoveWords ();
+		}
+	}
+
+	private void MoveWords ()
 	{
 		int i = 0;
 		foreach(Word word in words) 
 		{
-			StartCoroutine(MoveWordUp(word, i));
+			StartCoroutine(MoveWord(word, i));
 			i++;
 		}
 	}
 
-	private IEnumerator MoveWordUp (Word word, int position)
+	// Move words up or down dependent on the position of the current word
+	private IEnumerator MoveWord (Word word, int position)
 	{
 		bool moving = true;
 		
@@ -47,8 +57,7 @@ public class WordNumbersController : GameController {
 		Vector2 startPosition = rectTrans.anchoredPosition;
 		Vector2 targetPosition = new Vector2(0, (position - currentWordIndex) * -((WordNumbersController) GameController.Instance).gameCanvas.GetComponent<RectTransform>().sizeDelta.y);
 		float currentLerpTime = 0f;
-		
-		Debug.Log (startPosition + " " + targetPosition);
+
 		while (moving) 
 		{
 			currentLerpTime += Time.deltaTime;
@@ -60,9 +69,8 @@ public class WordNumbersController : GameController {
 			float t = currentLerpTime / switchDuration;
 			t = t * t * t * (t * (6f * t - 15f) + 10f);
 
-			Debug.Log (startPosition + " " + targetPosition + " " + t);
 			Vector2 newPos = Vector2.Lerp (startPosition, targetPosition, t);
-			//Debug.Log (newPos);
+
 			rectTrans.anchoredPosition = newPos;
 			
 			if(t == 1.0f) {
