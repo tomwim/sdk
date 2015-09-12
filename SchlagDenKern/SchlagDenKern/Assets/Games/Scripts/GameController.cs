@@ -4,6 +4,8 @@ using System.Collections;
 public class GameController : Singleton<GameController> 
 {
 
+	public GameObject gameCanvas;
+
 	// Use this for initialization
 	void Start () {
 		StartMe ();
@@ -18,12 +20,17 @@ public class GameController : Singleton<GameController>
 	{
 		if(Input.GetKeyUp(KeyCode.S))
 		{
-			Solve();
+			Solve ();
 		}
 
 		if(Input.GetKeyUp(KeyCode.RightArrow))
 		{
-			Next();
+			Next ();
+		}
+
+		if(Input.GetKeyUp(KeyCode.LeftArrow))
+		{
+			Previous ();
 		}
 	}
 
@@ -33,6 +40,11 @@ public class GameController : Singleton<GameController>
 	}
 
 	public virtual void Next ()
+	{
+
+	}
+
+	public virtual void Previous ()
 	{
 
 	}
