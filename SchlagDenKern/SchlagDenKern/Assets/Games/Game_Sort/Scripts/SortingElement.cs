@@ -4,9 +4,12 @@ using UnityEngine.UI;
 
 public class SortingElement : MyMonoBehaviour 
 {
+	public RectTransform rectTransform;
 	public Text text;
 	public float gap;
 	public float movingDuration;
+	public float showingDuration;
+	public float waitingTimeBeforeShowing = 0.1f;
 
 	public string Text
 	{
@@ -21,9 +24,15 @@ public class SortingElement : MyMonoBehaviour
 		}
 	}
 
-	public string Position 
+	public int Position 
 	{
 		get;
+		set;
+	}
+
+	public int InsertedPosition 
+	{
+		get; 
 		set;
 	}
 
@@ -37,20 +46,101 @@ public class SortingElement : MyMonoBehaviour
 		StartCoroutine (CoMove (true));
 	}
 
+	public void Insert (SortingElement referenceElement)
+	{
+		/* if reference element is above this element add position */
+		float belowFactor = (referenceElement.InsertedPosition < InsertedPosition) ? 1f : -1f;
+
+		Vector2 insertPosition = referenceElement.rectTransform.anchoredPosition + (new Vector2(0f, rectTransform.sizeDelta.y + gap) * belowFactor);
+
+		StartCoroutine (CoInsert (insertPosition));
+	}
+
+	/* insert the element at a certain position */
+	public IEnumerator CoInsert (Vector2 insertPosition)
+	{
+		bool inserting = true;
+		bool showing = false;
+		bool hiding = true;
+
+		Vector2 startSize = rectTransform.sizeDelta;
+		Vector2 endSize = Vector2.zero;
+
+		float currentLerpTime = 0f;
+
+		while (inserting) 
+		{
+			/* first hide element */
+			while (hiding) {
+				currentLerpTime += Time.deltaTime;
+
+				if (currentLerpTime > showingDuration)
+				{
+					currentLerpTime = showingDuration;
+				}
+
+				float t = currentLerpTime / showingDuration;
+				t = t * t * t * (t * (6f * t - 15f) + 10f);
+
+				Vector2 newSize = Vector2.Lerp (startSize, endSize, t);
+				rectTransform.sizeDelta = newSize;
+
+				if (rectTransform.sizeDelta == endSize)
+				{
+					hiding = false;
+					showing = true;
+					currentLerpTime = 0;
+				}
+				yield return null;
+			}
+
+			/* then move hidden element to appropriate position and wait a short period of time */
+			rectTransform.anchoredPosition = insertPosition;
+			yield return new WaitForSeconds (waitingTimeBeforeShowing);
+
+			/* then show hidden element again */
+			while (showing)
+			{
+				currentLerpTime += Time.deltaTime;
+
+				if(currentLerpTime > showingDuration)
+				{
+					currentLerpTime = showingDuration;
+				}
+
+				float t = currentLerpTime / showingDuration;
+				t = t * t * t * (t * (6f * t - 15f) + 10f);
+
+				Vector2 newSize = Vector2.Lerp (endSize, startSize, t);
+				rectTransform.sizeDelta = newSize;
+
+				if (rectTransform.sizeDelta == startSize)
+				{
+					showing = false;
+					inserting = false;
+				}
+
+				yield return null;
+			}
+		}
+	}
+
 	/* Move the element either down or up before a new element is inserted */
 	public IEnumerator CoMove(bool down)
 	{
-		float isMovingDownFactor = down ? -1 : 1;
+		float isMovingDownFactor = down ? -1f : 1f;
 		bool moving = true;
-		Vector2 startPosition = text.rectTransform.anchoredPosition;
-		Vector2 endPosition = startPosition + (new Vector2(0.0f, text.rectTransform.sizeDelta.y + gap) * isMovingDownFactor);
+
+		Vector2 startPosition = rectTransform.anchoredPosition;
+		Vector2 endPosition = startPosition + (new Vector2(0.0f, rectTransform.sizeDelta.y + gap) * isMovingDownFactor);
+
 		float currentLerpTime = 0f;
 
 		while (moving) 
 		{
 			currentLerpTime += Time.deltaTime;
 
-			if(currentLerpTime > movingDuration)
+			if (currentLerpTime > movingDuration)
 			{
 				currentLerpTime = movingDuration;
 			}
@@ -59,9 +149,9 @@ public class SortingElement : MyMonoBehaviour
 			t = t * t * t * (t * (6f * t - 15f) + 10f);
 
 			Vector2 newPos = Vector2.Lerp (startPosition, endPosition, t);
-			text.rectTransform.anchoredPosition = newPos;
+			rectTransform.anchoredPosition = newPos;
 
-			if(text.rectTransform.anchoredPosition == endPosition)
+			if(rectTransform.anchoredPosition == endPosition)
 			{
 				moving = false;
 			}
